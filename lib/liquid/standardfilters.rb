@@ -177,7 +177,7 @@ module Liquid
 
     # Outputs the singular or plural version of a string based on the value of a number.
     def pluralize(input, singular, plural)
-      if input > 1
+      if input.to_i > 1
         plural
       else
         singular
