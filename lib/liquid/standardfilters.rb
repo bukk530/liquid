@@ -186,7 +186,7 @@ module Liquid
 
     # Identifies all characters in a string that are not allowed in URLS, and replaces the characters with their escaped variants.
     def url_escape(input)
-      URI.escape input
+      URI.escape input.to_s
     end
 
     # Replaces all characters in a string that are not allowed in URLs with their escaped variants, including the ampersand (&).
