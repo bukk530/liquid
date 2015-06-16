@@ -1,3 +1,5 @@
+require 'digest'
+require 'uri'
 require 'cgi'
 require 'bigdecimal'
 
@@ -153,6 +155,43 @@ module Liquid
     def reverse(input)
       ary = InputIterator.new(input)
       ary.reverse
+    end
+
+    # Digest a string using md5
+    def md5(input)
+      md5 = Digest::MD5.new
+      md5.update input.to_s
+      md5.hexdigest
+    end
+
+    # Converts strings to UpperCamelCase
+    def camelcase(input)
+      input.to_s.split(/[\W\-_]+/).map(&:capitalize).join
+    end
+
+    # Formats a string into a handle
+    def handle(input)
+      input.to_s.downcase.split(/\W+/).join('-')
+    end
+    alias_method :handleize, :handle
+
+    # Outputs the singular or plural version of a string based on the value of a number.
+    def pluralize(input, singular, plural)
+      if input > 1
+        plural
+      else
+        singular
+      end
+    end
+
+    # Identifies all characters in a string that are not allowed in URLS, and replaces the characters with their escaped variants.
+    def url_escape(input)
+      URI.escape input
+    end
+
+    # Replaces all characters in a string that are not allowed in URLs with their escaped variants, including the ampersand (&).
+    def url_param_escape(input)
+      url_escape(input).gsub('&', '%26')
     end
 
     # map/collect on a given property

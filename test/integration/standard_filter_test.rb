@@ -388,6 +388,36 @@ class StandardFiltersTest < Minitest::Test
     assert_template_result('bcd', "{{ a | append: b}}", assigns)
   end
 
+  def test_md5
+    assert_template_result('0cc175b9c0f1b6a831c399e269772661', "{{ 'a' | md5 }}")
+    assert_template_result('cfcd208495d565ef66e7dff9f98764da', "{{ 0 | md5 }}")
+    assert_template_result('b326b5062b2f0e69046810717534cb09', "{{ true | md5 }}")
+  end
+
+  def test_camelcase
+    assert_template_result('FooBar', "{{ 'foo-bar' | camelcase }}")
+    assert_template_result('FooBar', "{{ 'foo bar' | camelcase }}")
+    assert_template_result('FooBar', "{{ 'foo_bar' | camelcase }}")
+  end
+
+  def test_handle
+    assert_template_result('100-m-ms', "{{ '100% M & Ms!!!' | handle }}")
+    assert_template_result('100-m-ms', "{{ '100% M & Ms!!!' | handleize }}")
+  end
+
+  def test_pluralize
+    assert_template_result('items', "{{ 4 | pluralize: 'item', 'items' }}")
+    assert_template_result('item', "{{ 1 | pluralize: 'item', 'items' }}")
+  end
+
+  def test_url_escape
+    assert_template_result('%3Chello%3E%20&%20%3Cshopify%3E', "{{ '<hello> & <shopify>' | url_escape }}")
+  end
+
+  def test_url_param_escape
+    assert_template_result('%3Chello%3E%20%26%20%3Cshopify%3E', "{{ '<hello> & <shopify>' | url_param_escape }}")
+  end
+
   def test_concat
     assert_equal [1, 2, 3, 4], @filters.concat([1, 2], [3, 4])
     assert_equal [1, 2, 'a'],  @filters.concat([1, 2], ['a'])
